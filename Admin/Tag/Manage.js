@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react'
-import { Form, LongText, Progress, app, get, post } from '@Form'
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import Button from '@mui/material/Button';
+import { ItemAction } from '@List'
+import { Form, Checks, Progress, Actions, app, get, post } from '@Form'
+import { Dialog } from '@Panel'
 
-const ManageTags = (entity) => {
+const ManageTags = ({
+    entityType,
+    entityGuid
+}) => {
 
-    const [loading, setLoading] = useState(true)
+    const [isOpen, setIsOpen] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [tags, setTags] = useState(null)
     const [tagItems, setTagItems] = useState(null)
 
     const loadTags = () => {
         setLoading(true)
-        get(`/tag/list?entityType=${entity.relatedItems.entityType}`)
+        get(`/tag/list?entityType=${entityType}`)
             .then(data => {
                 setTags(data)
             }, error => {
@@ -20,7 +28,7 @@ const ManageTags = (entity) => {
 
     const loadTagItems = () => {
         setLoading(true)
-        get(`/tagItem/list?entityType=${entity.relatedItems.entityType}&entityGuid=${entity.guid}`).then(data => {
+        get(`/tagItem/list?entityType=${entityType}&entityGuid=${entityGuid}`).then(data => {
             setTagItems(data)
         }, error => {
             setLoading(false)
@@ -28,10 +36,18 @@ const ManageTags = (entity) => {
         })
     }
 
-    useEffect(() => {
-        loadTags()
-        loadTagItems()
-    }, [])
+    const save = () => {
+        setLoading(true);
+        post(`/tagItem/upsert?entityType=${entityType}&entityGuid=${entityGuid}`)
+            .then(data => {
+                setLoading(false);
+                app.success('Tags updated')
+                setIsOpen(false)
+            }, error => {
+                setLoading(false);
+                app.error(error)
+            })
+    }
 
     useEffect(() => {
         if (tags && tags.length && tagItems && tagItems.length) {
@@ -39,33 +55,47 @@ const ManageTags = (entity) => {
         }
     }, [tagItems, tags])
 
-    return <Form
-        entityType='TagItem'
-        title='Manage tags'
-        inputs={<>
-            {
-                loading
-                    ?
-                    <Progress />
-                    :
-                    <LongText
-                        column='something'
-                    />
-            }
+    const actions = <>
+        <Button
+            tabIndex={-1}
+            className="text-gray-900 border-gray-400 "
+            variant="outlined"
+            onClick={() => setIsOpen(false)}
+        >
+            {app.t('Cancel')}
+        </Button>
+        <Button
+            variant="outlined"
+            className='ml-2 bg-green-200 text-gray-900 border-gray-400'
+            onClick={(e) => { }}
+        >
+            {app.t('Save')}
+        </Button>
+    </>
+
+    const ItemDialog = <Dialog
+        title='Manage titles'
+        content={<>
+            hello
         </>}
-        okAction={({ setProgress }) => {
-            setProgress(true);
-            post(`/tagItem/upsert?entityType=${entity.relatedItems.entityType}&entityGuid=${entity.guid}`)
-                .then(data => {
-                    setProgress(false);
-                    app.success('Tags updated')
-                    app.emit(app.entityReloadRequested, { entity })
-                }, error => {
-                    setProgress(false);
-                    app.error(error)
-                })
+        actions={actions}
+        isOpen={isOpen}
+        onEntered={() => {
         }}
     />
+
+    return <>
+        {ItemDialog}
+        <ItemAction
+            title="Manage tags"
+            icon={LocalOfferIcon}
+            click={() => {
+                loadTags()
+                loadTagItems()
+                setIsOpen(true)
+            }}
+        />
+    </>
 }
 
 export default ManageTags
