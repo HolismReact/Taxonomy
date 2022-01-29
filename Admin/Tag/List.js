@@ -1,4 +1,5 @@
 import { List, Text } from '@List'
+import UpsertTag from './Upsert'
 
 const filters = <>
     <Text
@@ -22,6 +23,9 @@ const Tags = () => {
         filters={filters}
         headers={headers}
         row={row}
+        upsert={UpsertTag}
+        hasEdit={true}
+        hasDelete={true}
     />
 }
 
