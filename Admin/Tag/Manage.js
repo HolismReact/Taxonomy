@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import Button from '@mui/material/Button';
 import { ItemAction } from '@List'
 import { Checks, app, post } from '@Form'
 import { Dialog, OkCancel } from '@Panel'
@@ -11,8 +10,8 @@ const ManageTags = ({
 }) => {
 
     const [isOpen, setIsOpen] = useState(false)
-    const [loadData, setLoadData] = useState(null)
     const [progress, setProgress] = useState(false)
+    const checksRef = useRef()
 
     const save = () => {
         setProgress(true);
@@ -27,31 +26,32 @@ const ManageTags = ({
             })
     }
 
-    const ItemDialog = <Dialog
-        title='Manage titles'
-        content={<>
-            <Checks
-                itemsUrl={`/tag/list?entityType=${entityType}`}
-                setLoader={loader => setLoadData(loader)}
-            />
-        </>}
-        actions={<OkCancel
-            progress={progress}
-            okClick={() => save()}
-            cancelClick={() => setIsOpen(false)}
-        />}
-        isOpen={isOpen}
-        onEntered={() => {
-        }}
-    />
-
     return <>
-        {ItemDialog}
+        <Dialog
+            title='Manage titles'
+            content={<>
+                <Checks
+                    itemsUrl={`/tag/list?entityType=${entityType}`}
+                    checkedItemsUrl={`/tagItem/list?entityType=${entityType}&entityGuid=${entityGuid}`}
+                    show={item => item.name}
+                    choose={item => item.guid}
+                    ref={checksRef}
+                />
+            </>}
+            actions={<OkCancel
+                progress={progress}
+                okClick={() => save()}
+                cancelClick={() => setIsOpen(false)}
+            />}
+            isOpen={isOpen}
+            onEntered={() => {
+            }}
+        />
         <ItemAction
             title="Manage tags"
             icon={LocalOfferIcon}
             click={() => {
-                loadData()
+                checksRef.current.loadData()
                 setIsOpen(true)
             }}
         />
