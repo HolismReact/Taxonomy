@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import { ItemAction } from '@List'
 import { Checks, app, post } from '@Form'
@@ -11,7 +11,6 @@ const ManageTags = ({
 
     const [isOpen, setIsOpen] = useState(false)
     const [progress, setProgress] = useState(false)
-    const checksRef = useRef()
 
     const save = () => {
         setProgress(true);
@@ -28,14 +27,13 @@ const ManageTags = ({
 
     return <>
         <Dialog
-            title='Manage titles'
+            title='Manage tags'
             content={<>
                 <Checks
                     itemsUrl={`/tag/list?entityType=${entityType}`}
                     checkedItemsUrl={`/tagItem/list?entityType=${entityType}&entityGuid=${entityGuid}`}
                     show={item => item.name}
                     choose={item => item.guid}
-                    ref={checksRef}
                 />
             </>}
             actions={<OkCancel
@@ -51,7 +49,6 @@ const ManageTags = ({
             title="Manage tags"
             icon={LocalOfferIcon}
             click={() => {
-                checksRef.current.loadData()
                 setIsOpen(true)
             }}
         />
