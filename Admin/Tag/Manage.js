@@ -30,7 +30,7 @@ const ManageTags = ({
             title='Manage tags'
             content={<>
                 <Checks
-                    itemsUrl={`/tag/list?entityType=${entityType}`}
+                    itemsUrl={`/tag/entityTypeTags?entityType=${entityType}`}
                     checkedItemsUrl={`/tagItem/list?entityType=${entityType}&entityGuid=${entityGuid}`}
                     show={item => item.name}
                     choose={item => item.guid}
