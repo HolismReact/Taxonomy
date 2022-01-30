@@ -11,10 +11,12 @@ const ManageTags = ({
 
     const [isOpen, setIsOpen] = useState(false)
     const [progress, setProgress] = useState(false)
+    const [chosenValues, setChosenValues] = useState([])
 
     const save = () => {
+        console.log(chosenValues)
         setProgress(true);
-        post(`/tagItem/upsert?entityType=${entityType}&entityGuid=${entityGuid}`)
+        post(`/tagItem/putInTags?entityType=${entityType}&entityGuid=${entityGuid}`, chosenValues)
             .then(data => {
                 setProgress(false);
                 app.success('Tags updated')
@@ -34,6 +36,7 @@ const ManageTags = ({
                     checkedItemsUrl={`/tagItem/list?entityType=${entityType}&entityGuid=${entityGuid}`}
                     show={item => item.name}
                     choose={item => item.guid}
+                    set={setChosenValues}
                 />
             </>}
             actions={<OkCancel
