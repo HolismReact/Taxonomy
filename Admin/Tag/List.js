@@ -1,4 +1,4 @@
-import { List, Text } from '@List'
+import { List, Text, Image } from '@List'
 import UpsertTag from './Upsert'
 
 const filters = <>
@@ -9,10 +9,17 @@ const filters = <>
 </>
 
 const headers = <>
+    <th></th>
     <th>Name</th>
 </>
 
 const row = (item) => <>
+    <td>
+        <Image
+            url={item.relatedItems.iconUrl}
+            uploadUrl={`/blogPost/setImage?postId=${item.id}`}
+        />
+    </td>
     <td>{item.name}</td>
 </>
 
