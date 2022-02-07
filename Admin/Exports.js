@@ -1,10 +1,11 @@
 import { Hierarchies } from './Hierarchy/List'
+import { HierarchyTree } from './Hierarchy/Tree'
 import { Tags } from './Tag/List'
 
 const TaxonomyRoutes = [
     {
         "path": "/hierarchies",
-        "component": Hierarchies
+        "component": HierarchyTree
     },
     {
         "path": "/tags",
