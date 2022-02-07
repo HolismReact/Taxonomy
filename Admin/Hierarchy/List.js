@@ -3,3 +3,4 @@ const Hierarchies = () => {
 }
 
 export default Hierarchies
+export { Hierarchies }
