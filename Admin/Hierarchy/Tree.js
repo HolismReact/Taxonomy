@@ -1,4 +1,12 @@
-import { Tree } from '@Tree'
+import { Tree, Text } from '@List'
+import Upsert from './Upsert'
+
+const filters = <>
+    <Text
+        column="Title"
+        placeholder="Title"
+    />
+</>
 
 const HierarchyTree = ({
     title,
@@ -8,6 +16,8 @@ const HierarchyTree = ({
     return <Tree
         title={title || 'Hierarchies'}
         entityType='Hierarchy'
+        filters={filters}
+        upsert={Upsert}
         {...others}
     />
 }
