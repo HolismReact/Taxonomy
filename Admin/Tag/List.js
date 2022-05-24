@@ -1,4 +1,4 @@
-import { List, Text, Image } from '@List'
+import { List, Text, Image, ValueWithTitle, TitleSubtitle, BooleanProperty } from '@List'
 import UpsertTag from './Upsert'
 
 const filters = <>
@@ -8,9 +8,23 @@ const filters = <>
     />
 </>
 
+const sorts = [
+    {
+        caption: 'ٔName A-Z',
+        column: 'Name',
+        direction: 'asc'
+    },
+    {
+        caption: 'Name Z-A',
+        column: 'Name',
+        direction: 'desc'
+    }
+]
+
 const headers = <>
     <th></th>
-    <th>Name</th>
+    <th className='text-left'>Name</th>
+    <th>Is active?</th>
 </>
 
 const row = (item) => <>
@@ -20,7 +34,23 @@ const row = (item) => <>
             uploadUrl={`/tag/setImage?tagId=${item.id}`}
         />
     </td>
-    <td>{item.name}</td>
+    <td>
+        <TitleSubtitle
+            title={
+                <ValueWithTitle
+                    value={item.name}
+                    title={item.description}
+                />}
+            subtitle={item.slug}
+        />
+    </td>
+    <td>
+        <BooleanProperty
+            column='show'
+            value={item.show}
+            actionUrl={`/tag/toggleIsActive/${item.id}`}
+        />
+    </td>
 </>
 
 const Tags = () => {
@@ -28,6 +58,7 @@ const Tags = () => {
         title='Tags'
         entityType='Tag'
         filters={filters}
+        sorts={sorts}
         headers={headers}
         row={row}
         upsert={UpsertTag}
