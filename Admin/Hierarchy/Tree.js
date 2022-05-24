@@ -17,7 +17,12 @@ const HierarchyTree = ({
         title={title || 'Hierarchies'}
         entityType='Hierarchy'
         filters={filters}
+        show={item => {
+            return item.title
+        }}
         upsert={Upsert}
+        hasEdit={true}
+        hasDelete={true}
         {...others}
     />
 }
