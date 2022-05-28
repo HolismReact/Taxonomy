@@ -16,7 +16,7 @@ const ManageTags = ({
     const save = () => {
         console.log(chosenValues)
         setProgress(true);
-        post(`/tagItem/putInTags?entityType=${entityType}&entityGuid=${entityGuid}`, chosenValues)
+        post(`/entityTag/putInTags?entityType=${entityType}&entityGuid=${entityGuid}`, chosenValues)
             .then(data => {
                 setProgress(false);
                 app.success('Tags updated')
@@ -33,7 +33,7 @@ const ManageTags = ({
             content={<>
                 <Checks
                     itemsUrl={`/tag/entityTypeTags?entityType=${entityType}`}
-                    checkedItemsUrl={`/tagItem/list?entityType=${entityType}&entityGuid=${entityGuid}`}
+                    checkedItemsUrl={`/entityTag/list?entityType=${entityType}&entityGuid=${entityGuid}`}
                     show={item => item.name}
                     choose={item => item.tagGuid || item.guid}
                     set={setChosenValues}

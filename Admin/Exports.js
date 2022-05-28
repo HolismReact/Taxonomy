@@ -1,6 +1,7 @@
 import { Hierarchies } from './Hierarchy/List'
 import { HierarchyTree } from './Hierarchy/Tree'
-import { Tags } from './Tag/List'
+import Tags from './Tag/List'
+import ManageTags from './Tag/Manage'
 
 const TaxonomyRoutes = [
     {
@@ -16,3 +17,4 @@ const TaxonomyRoutes = [
 export { TaxonomyRoutes }
 export { Hierarchies }
 export { Tags }
+export { ManageTags }

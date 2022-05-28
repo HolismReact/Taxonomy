@@ -68,4 +68,3 @@ const Tags = () => {
 }
 
 export default Tags
-export { Tags }
