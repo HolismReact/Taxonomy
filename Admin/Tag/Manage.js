@@ -6,7 +6,8 @@ import { Dialog, OkCancel } from '@Panel'
 
 const ManageTags = ({
     entityType,
-    entityGuid
+    entityGuid,
+    ...rest
 }) => {
 
     const [isOpen, setIsOpen] = useState(false)
@@ -49,6 +50,7 @@ const ManageTags = ({
             }}
         />
         <ItemAction
+            {...rest}
             title="Manage tags"
             icon={LocalOfferIcon}
             click={() => {

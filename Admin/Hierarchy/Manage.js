@@ -7,7 +7,8 @@ import { Dialog, OkCancel } from '@Panel'
 const ManageHierarchies = ({
     pluralName,
     entityType,
-    entityGuid
+    entityGuid,
+    ...rest
 }) => {
 
     const [isOpen, setIsOpen] = useState(false)
@@ -50,6 +51,7 @@ const ManageHierarchies = ({
             }}
         />
         <ItemAction
+            {...rest}
             title="Manage hierarchies"
             icon={AccountTreeIcon}
             click={() => {
