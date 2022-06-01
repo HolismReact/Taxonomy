@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import AccountTreeIcon from '@mui/icons-material/AccountTree'
 import { ItemAction } from '@List'
-import { Checks, app, post } from '@Form'
-import { Dialog, OkCancel } from '@Panel'
+import { DialogForm, Checks, app, post } from '@Form'
 
 const ManageHierarchies = ({
     pluralName,
@@ -11,52 +10,45 @@ const ManageHierarchies = ({
     ...rest
 }) => {
 
-    const [isOpen, setIsOpen] = useState(false)
-    const [progress, setProgress] = useState(false)
     const [chosenValues, setChosenValues] = useState([])
 
-    const save = () => {
+    const inputs = <>
+        <Checks
+            itemsUrl={`/hierarchy/entityTypeHierarchies?entityType=${entityType}`}
+            checkedItemsUrl={`/entityHierarchy/list?entityType=${entityType}&entityGuid=${entityGuid}`}
+            show={item => item.name}
+            choose={item => item.hierarchyGuid || item.guid}
+            set={setChosenValues}
+        />
+    </>
+
+    const save = ({ setProgress }) => {
         console.log(chosenValues)
         setProgress(true);
         post(`/entityHierarchy/putInHierarchies?entityType=${entityType}&entityGuid=${entityGuid}`, chosenValues)
             .then(data => {
                 setProgress(false);
-                app.success(`${pluralName || 'Hierarchies'} are updated`)
-                setIsOpen(false)
+                app.success(`${pluralName || "Hierarchies"} updated`)
+                app.emit(app.itemUpserted);
             }, error => {
                 setProgress(false);
                 app.error(error)
             })
     }
 
+    const HierarchiesDialog = (item) => <DialogForm
+        entityType="Hierarchy"
+        title={`Manage ${pluralName || "hierarchies"}`}
+        inputs={inputs}
+        okAction={save}
+    />
+
     return <>
-        <Dialog
-            title='Manage hierarchies'
-            content={<>
-                <Checks
-                    itemsUrl={`/tag/entityTypeTags?entityType=${entityType}`}
-                    checkedItemsUrl={`/entityTag/list?entityType=${entityType}&entityGuid=${entityGuid}`}
-                    show={item => item.name}
-                    choose={item => item.tagGuid || item.guid}
-                    set={setChosenValues}
-                />
-            </>}
-            actions={<OkCancel
-                progress={progress}
-                okClick={() => save()}
-                cancelClick={() => setIsOpen(false)}
-            />}
-            isOpen={isOpen}
-            onEntered={() => {
-            }}
-        />
         <ItemAction
             {...rest}
-            title="Manage hierarchies"
+            title={`Manage ${pluralName || "hierarchies"}`}
             icon={AccountTreeIcon}
-            click={() => {
-                setIsOpen(true)
-            }}
+            dialog={HierarchiesDialog}
         />
     </>
 }
