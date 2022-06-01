@@ -1,5 +1,6 @@
 import { List, Text, Image, ValueWithTitle, TitleSubtitle, BooleanProperty } from '@List'
 import UpsertTag from './Upsert'
+import { EntitySeo } from '../../Seo/Exports'
 
 const filters = <>
     <Text
@@ -53,6 +54,13 @@ const row = (item) => <>
     </td>
 </>
 
+const itemActions = (item) => <>
+    <EntitySeo
+        entityType='Tag'
+        entityGuid={item.guid}
+    />
+</>
+
 const Tags = () => {
     return <List
         title='Tags'
@@ -61,6 +69,7 @@ const Tags = () => {
         sorts={sorts}
         headers={headers}
         row={row}
+        itemActions={itemActions}
         upsert={UpsertTag}
         hasEdit={true}
         hasDelete={true}
